@@ -17,6 +17,7 @@ vendor/
 wp-cli.phar
 wp.bat
 wp-content/debug.log
+mkcert.exe
 
 # Certificates / local secrets
 certs/
