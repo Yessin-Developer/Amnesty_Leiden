@@ -209,7 +209,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0.55rem 1.15rem;
-  border-radius: 99px;
+  border-radius: 9px;
   font-weight: 600;
   text-decoration: none;
   border: 2px solid transparent;
@@ -232,7 +232,7 @@ body {
   background: #ffbc00;
   border-color: #ffbc00;
   color: #111;
-  box-shadow: 0 10px 22px -14px rgba(15, 23, 42, 0.4);
+  
 }
 
 .cta-button--primary:hover,
@@ -422,7 +422,8 @@ body.nav-open {
 
   body.nav-open .site-nav {
     transform: translateY(0);
-    box-shadow: 0 28px 40px -25px rgba(15, 23, 42, 0.4);
+    background: #fff;
+    position: fixed;
   }
 
   .primary-menu {

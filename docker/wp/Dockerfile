@@ -7,4 +7,6 @@ COPY apache/wordpress.conf /etc/apache2/sites-available/wordpress.conf
 RUN a2dissite 000-default \
  && a2ensite wordpress
 
+COPY php.ini /usr/local/etc/php/conf.d/uploads.ini
+
 
