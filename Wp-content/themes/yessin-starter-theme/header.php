@@ -25,5 +25,6 @@
           ) );
         ?>
       </nav>
+      <div class="nav-backdrop" aria-hidden="true"></div>
     </div>
   </header>

@@ -81,6 +81,21 @@ body {
   gap: 2rem;
 }
 
+.nav-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.nav-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .primary-menu {
   list-style: none;
   display: flex;
@@ -190,7 +205,10 @@ body.nav-open {
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 2rem calc(env(safe-area-inset-bottom) + 2rem);
+    max-height: calc(100vh - var(--header-height));
+    overflow-y: auto;
+    z-index: 1001;
     transform: translateY(-120%);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
@@ -219,6 +237,11 @@ body.nav-open {
 
   .nav-toggle {
     display: block;
+  }
+
+  .nav-backdrop {
+    display: block;
+    z-index: 1000;
   }
 }
 

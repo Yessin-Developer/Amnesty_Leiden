@@ -3,17 +3,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const header = document.querySelector('.site-header');
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.site-nav');
+  const backdrop = document.querySelector('.nav-backdrop');
 
   if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      const isOpen = body.classList.toggle('nav-open');
+    const setNavState = (isOpen) => {
+      body.classList.toggle('nav-open', isOpen);
       toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (backdrop) {
+        backdrop.classList.toggle('is-visible', isOpen);
+        backdrop.setAttribute('aria-hidden', String(!isOpen));
+      }
+    };
+
+    toggle.addEventListener('click', () => {
+      const nextState = !body.classList.contains('nav-open');
+      setNavState(nextState);
     });
 
-    nav.addEventListener('click', event => {
+    nav.addEventListener('click', (event) => {
       if (event.target instanceof HTMLAnchorElement) {
-        body.classList.remove('nav-open');
-        toggle.setAttribute('aria-expanded', 'false');
+        setNavState(false);
+      }
+    });
+
+    if (backdrop) {
+      backdrop.addEventListener('click', () => setNavState(false));
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && body.classList.contains('nav-open')) {
+        setNavState(false);
+        toggle.focus();
       }
     });
   }
