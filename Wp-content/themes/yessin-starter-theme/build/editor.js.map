@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../assets/js/editor-src.js"],
+  "sourcesContent": ["console.log('editor src loaded \u2014 build this file to build/editor.js');\n"],
+  "mappings": "MAAA,QAAQ,IAAI,6DAAwD",
+  "names": []
+}

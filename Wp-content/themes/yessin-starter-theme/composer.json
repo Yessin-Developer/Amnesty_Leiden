@@ -1,0 +1,19 @@
+{
+    "name": "yessin/starter-theme",
+    "description": "A custom WordPress starter theme",
+    "type": "wordpress-theme",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Yessin"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "YessinTheme\\": "src/"
+        }
+    }
+}

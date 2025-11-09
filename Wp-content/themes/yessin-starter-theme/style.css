@@ -1,0 +1,234 @@
+/*
+Theme Name: Yessin starter theme
+Theme URI:  https://example.com
+Description: Starter theme gemaakt voor lokaal development. ACF blocks & Gutenberg-ready.
+Author: Yessin
+Version: 1.0.0
+Text Domain: yessin-starter
+*/
+
+html {
+  --wrap: 1100px;
+  --header-height: 72px;
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --header-shadow: 0 10px 30px -20px rgba(15, 23, 42, 0.4);
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height: 1.6;
+  margin: 0;
+  background: #f5f6f8;
+  color: #1f2933;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.faq-item {
+  margin-bottom: 1rem;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--header-bg);
+  backdrop-filter: blur(8px);
+  box-shadow: none;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.site-header.is-scrolled {
+  box-shadow: var(--header-shadow);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.site-logo {
+  font-weight: 700;
+  text-decoration: none;
+  color: #111;
+  font-size: 1.25rem;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.primary-menu {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.primary-menu > li {
+  position: relative;
+}
+
+.primary-menu a {
+  text-decoration: none;
+  color: #1f2933;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.primary-menu a:hover,
+.primary-menu a:focus {
+  color: #0077ff;
+}
+
+.nav-toggle {
+  display: none;
+  border: 0;
+  background: none;
+  padding: 0.5rem;
+  margin-left: auto;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid #0077ff;
+  outline-offset: 4px;
+}
+
+.nav-toggle__bar {
+  display: block;
+  width: 26px;
+  height: 3px;
+  background: #111;
+  margin: 4px 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-toggle__label {
+  position: absolute;
+  inset: 0;
+  font-size: 0;
+  line-height: 0;
+}
+
+.nav-open .nav-toggle__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-open .nav-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-open .nav-toggle__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.block-hero {
+  padding: 6rem 0;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.site-footer {
+  background: #f0f2f5;
+  padding: 2rem 0;
+  margin-top: 4rem;
+}
+
+body.nav-open {
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  html {
+    --header-height: 64px;
+  }
+
+  .site-header .wrap {
+    padding: 0.85rem 1.5rem;
+  }
+
+  .site-nav {
+    position: fixed;
+    inset: var(--header-height) 0 auto 0;
+    background: var(--header-bg);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 1.5rem 2rem;
+    transform: translateY(-120%);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  body.nav-open .site-nav {
+    transform: translateY(0);
+    box-shadow: 0 28px 40px -25px rgba(15, 23, 42, 0.4);
+  }
+
+  .primary-menu {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .primary-menu > li {
+    width: 100%;
+  }
+
+  .primary-menu a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+} 

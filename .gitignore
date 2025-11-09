@@ -1,0 +1,31 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node / npm
+dist/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Composer / PHP
+auto_prepend_file.php
+vendor/
+
+# WordPress tooling
+wp-cli.phar
+wp.bat
+wp-content/debug.log
+
+# Certificates / local secrets
+certs/
+
+# Docker build artifacts
+*.pid
+.docker/
+
+# IDE
+.vscode/
+.idea/
+*.swp

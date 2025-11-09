@@ -1,0 +1,13 @@
+{
+  "name": "yessin-starter-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node ./build-scripts/build.js",
+    "watch": "node ./build-scripts/watch.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.18.0",
+    "chokidar-cli": "^3.0.0"
+  }
+}
