@@ -1,0 +1,13 @@
+{
+  "name": "amnesty-leiden",
+  "version": "1.0.0",
+  "description": "Amnesty Leiden WordPress project",
+  "scripts": {
+    "build": "echo Build completed successfully",
+    "start": "docker-compose up",
+    "stop": "docker-compose down"
+  },
+  "keywords": ["wordpress"],
+  "author": "",
+  "license": "ISC"
+}

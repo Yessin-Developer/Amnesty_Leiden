@@ -15,7 +15,7 @@
         <span class="nav-toggle__bar"></span>
         <span class="nav-toggle__label"><?php esc_html_e( 'Menu', 'yessin-starter' ); ?></span>
       </button>
-      <nav class="site-nav" id="primary-menu">
+      <nav class="site-nav" data-site-nav id="primary-menu">
         <?php
           wp_nav_menu( array(
             'theme_location' => 'primary',
@@ -24,6 +24,14 @@
             'fallback_cb'    => false,
           ) );
         ?>
+        <div class="header-cta" data-header-cta>
+          <a class="cta-button cta-button--secondary" href="<?php echo esc_url( home_url( '/doneer' ) ); ?>">
+            <?php esc_html_e( 'Doneer', 'yessin-starter' ); ?>
+          </a>
+          <a class="cta-button cta-button--primary" href="<?php echo esc_url( home_url( '/word-lid' ) ); ?>">
+            <?php esc_html_e( 'Word lid', 'yessin-starter' ); ?>
+          </a>
+        </div>
       </nav>
       <div class="nav-backdrop" aria-hidden="true"></div>
     </div>

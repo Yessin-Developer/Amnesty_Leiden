@@ -11,10 +11,44 @@ function yessin_setup() {
 
   register_nav_menus( array(
     'primary' => __( 'Primary Menu', 'yessin-starter' ),
-    'footer' => __( 'Footer Menu', 'yessin-starter' ),
+    'footer'  => __( 'Footer Menu', 'yessin-starter' ),
+    'header_cta' => __( 'Header CTA Menu', 'yessin-starter' ),
   ) );
 }
 add_action( 'after_setup_theme', 'yessin_setup' );
+
+function yessin_register_sidebars() {
+  register_sidebar( array(
+    'name'          => __( 'Footer Brand', 'yessin-starter' ),
+    'id'            => 'footer-brand',
+    'description'   => __( 'Logo of korte intro voor in de footer', 'yessin-starter' ),
+    'before_widget' => '<div class="footer-widget footer-widget--brand">',
+    'after_widget'  => '</div>',
+    'before_title'  => '<h3 class="footer-widget__title">',
+    'after_title'   => '</h3>',
+  ) );
+
+  register_sidebar( array(
+    'name'          => __( 'Footer Social', 'yessin-starter' ),
+    'id'            => 'footer-social',
+    'description'   => __( 'Social media icoontjes of links', 'yessin-starter' ),
+    'before_widget' => '<div class="footer-widget footer-widget--social">',
+    'after_widget'  => '</div>',
+    'before_title'  => '<h3 class="footer-widget__title">',
+    'after_title'   => '</h3>',
+  ) );
+
+  register_sidebar( array(
+    'name'          => __( 'Footer Contact', 'yessin-starter' ),
+    'id'            => 'footer-contact',
+    'description'   => __( 'Contactinformatie voor in de footer', 'yessin-starter' ),
+    'before_widget' => '<div class="footer-widget footer-widget--contact">',
+    'after_widget'  => '</div>',
+    'before_title'  => '<h3 class="footer-widget__title">',
+    'after_title'   => '</h3>',
+  ) );
+}
+add_action( 'widgets_init', 'yessin_register_sidebars' );
 
 function yessin_enqueue_assets() {
   wp_enqueue_style( 'yessin-style', get_stylesheet_uri(), array(), filemtime( get_template_directory() . '/style.css' ) );
