@@ -275,37 +275,505 @@ function yessin_editor_assets() {
 }
 add_action( 'enqueue_block_editor_assets', 'yessin_editor_assets' );
 
+function yessin_register_block_category( $categories ) {
+  return array_merge(
+    array(
+      array(
+        'slug'  => 'amnesty-blocks',
+        'title' => __( 'Amnesty Blocks', 'yessin-starter' ),
+        'icon'  => 'block-default',
+      ),
+    ),
+    $categories
+  );
+}
+add_filter( 'block_categories_all', 'yessin_register_block_category', 10, 1 );
+
 function yessin_register_acf_blocks() {
   if ( ! function_exists( 'acf_register_block_type' ) ) return;
 
   acf_register_block_type(array(
     'name'              => 'hero',
-    'title'             => __('Hero'),
+    'title'             => __('Hero Header'),
+    'description'       => __('Full-width hero section with background image and CTAs'),
     'render_template'   => get_template_directory() . '/template-parts/blocks/block-hero.php',
-    'category'          => 'layout',
+    'category'          => 'amnesty-blocks',
     'icon'              => 'cover-image',
-    'keywords'          => array('hero','intro'),
+    'keywords'          => array('hero','intro','header'),
     'mode'              => 'preview',
-    'supports'          => array( 'align' => true ),
+    'supports'          => array(
+      'align'   => array( 'wide', 'full' ),
+      'anchor'  => true,
+      'spacing' => array(
+        'padding' => true,
+        'margin'  => true,
+      ),
+    ),
+    'example'           => array(
+      'attributes' => array(
+        'mode' => 'preview',
+        'data' => array(
+          'hero_title' => 'Hero Block',
+        )
+      )
+    ),
   ));
 
   acf_register_block_type(array(
     'name'              => 'cards',
     'title'             => __('Cards'),
+    'description'       => __('Grid of cards with custom content'),
     'render_template'   => get_template_directory() . '/template-parts/blocks/block-cards.php',
-    'category'          => 'widgets',
+    'category'          => 'amnesty-blocks',
     'icon'              => 'screenoptions',
     'keywords'          => array('cards','grid'),
+    'mode'              => 'preview',
+    'example'           => array(
+      'attributes' => array(
+        'mode' => 'preview',
+      )
+    ),
   ));
 
   acf_register_block_type(array(
     'name'              => 'faq',
     'title'             => __('FAQ'),
+    'description'       => __('Frequently asked questions accordion'),
     'render_template'   => get_template_directory() . '/template-parts/blocks/block-faq.php',
-    'category'          => 'widgets',
+    'category'          => 'amnesty-blocks',
     'icon'              => 'editor-help',
     'keywords'          => array('faq','accordion'),
+    'mode'              => 'preview',
+    'example'           => array(
+      'attributes' => array(
+        'mode' => 'preview',
+      )
+    ),
+  ));
+
+  acf_register_block_type(array(
+    'name'              => 'info-highlight',
+    'title'             => __('Info Highlight'),
+    'description'       => __('Highlight key information in a grid layout'),
+    'render_template'   => get_template_directory() . '/template-parts/blocks/block-info.php',
+    'category'          => 'amnesty-blocks',
+    'icon'              => 'awards',
+    'keywords'          => array('info','columns','stats'),
+    'mode'              => 'preview',
+    'supports'          => array(
+      'align'  => array( 'wide', 'full' ),
+      'anchor' => true,
+    ),
+    'example'           => array(
+      'attributes' => array(
+        'mode' => 'preview',
+        'data' => array(
+          'info_heading' => 'Info Highlight Block',
+        )
+      )
+    ),
+  ));
+
+  acf_register_block_type(array(
+    'name'              => 'news-list',
+    'title'             => __('News Grid'),
+    'description'       => __('Display latest news posts in a grid'),
+    'render_template'   => get_template_directory() . '/template-parts/blocks/block-news.php',
+    'category'          => 'amnesty-blocks',
+    'icon'              => 'excerpt-view',
+    'keywords'          => array('news','posts','updates'),
+    'mode'              => 'preview',
+    'supports'          => array(
+      'align'  => array( 'wide', 'full' ),
+      'anchor' => true,
+    ),
+    'example'           => array(
+      'attributes' => array(
+        'mode' => 'preview',
+        'data' => array(
+          'news_heading' => 'News Grid Block',
+        )
+      )
+    ),
+  ));
+
+  acf_register_block_type(array(
+    'name'              => 'contact-info',
+    'title'             => __('Contact Info'),
+    'description'       => __('Display contact details with optional CTA'),
+    'render_template'   => get_template_directory() . '/template-parts/blocks/block-contact.php',
+    'category'          => 'amnesty-blocks',
+    'icon'              => 'email',
+    'keywords'          => array('contact','details','info'),
+    'mode'              => 'preview',
+    'supports'          => array(
+      'align'  => array( 'wide', 'full' ),
+      'anchor' => true,
+    ),
+    'example'           => array(
+      'attributes' => array(
+        'mode' => 'preview',
+        'data' => array(
+          'contact_heading' => 'Contact Info Block',
+        )
+      )
+    ),
+  ));
+
+  acf_register_block_type(array(
+    'name'              => 'cta-banner',
+    'title'             => __('CTA Banner'),
+    'description'       => __('Call-to-action banner with dual buttons'),
+    'render_template'   => get_template_directory() . '/template-parts/blocks/block-banner.php',
+    'category'          => 'amnesty-blocks',
+    'icon'              => 'megaphone',
+    'keywords'          => array('cta','banner','buttons'),
+    'mode'              => 'preview',
+    'supports'          => array(
+      'align'  => array( 'wide', 'full' ),
+      'anchor' => true,
+    ),
+    'example'           => array(
+      'attributes' => array(
+        'mode' => 'preview',
+        'data' => array(
+          'banner_title' => 'CTA Banner Block',
+        )
+      )
+    ),
   ));
 }
 add_action( 'acf/init', 'yessin_register_acf_blocks' );
+
+function yessin_register_acf_field_groups() {
+  if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+    return;
+  }
+
+  acf_add_local_field_group(array(
+    'key' => 'group_hero_header',
+    'title' => __( 'Block: Hero Header', 'yessin-starter' ),
+    'fields' => array(
+      array(
+        'key' => 'field_hero_eyebrow',
+        'label' => __( 'Eyebrow', 'yessin-starter' ),
+        'name' => 'hero_eyebrow',
+        'type' => 'text',
+      ),
+      array(
+        'key' => 'field_hero_title',
+        'label' => __( 'Title', 'yessin-starter' ),
+        'name' => 'hero_title',
+        'type' => 'text',
+        'wrapper' => array( 'width' => '60' ),
+      ),
+      array(
+        'key' => 'field_hero_text',
+        'label' => __( 'Description', 'yessin-starter' ),
+        'name' => 'hero_text',
+        'type' => 'textarea',
+        'rows' => 3,
+      ),
+      array(
+        'key' => 'field_hero_primary_cta',
+        'label' => __( 'Primary CTA', 'yessin-starter' ),
+        'name' => 'hero_primary_cta',
+        'type' => 'link',
+        'return_format' => 'array',
+      ),
+      array(
+        'key' => 'field_hero_secondary_cta',
+        'label' => __( 'Secondary CTA', 'yessin-starter' ),
+        'name' => 'hero_secondary_cta',
+        'type' => 'link',
+        'return_format' => 'array',
+      ),
+      array(
+        'key' => 'field_hero_background',
+        'label' => __( 'Background Image', 'yessin-starter' ),
+        'name' => 'hero_background',
+        'type' => 'image',
+        'return_format' => 'array',
+        'preview_size' => 'large',
+      ),
+      array(
+        'key' => 'field_hero_overlay_color',
+        'label' => __( 'Overlay Color', 'yessin-starter' ),
+        'name' => 'hero_overlay_color',
+        'type' => 'color_picker',
+        'default_value' => '#000000',
+      ),
+      array(
+        'key' => 'field_hero_overlay_opacity',
+        'label' => __( 'Overlay Opacity (%)', 'yessin-starter' ),
+        'name' => 'hero_overlay_opacity',
+        'type' => 'number',
+        'default_value' => 60,
+        'min' => 0,
+        'max' => 90,
+        'append' => '%',
+      ),
+    ),
+    'location' => array(
+      array(
+        array(
+          'param' => 'block',
+          'operator' => '==',
+          'value' => 'acf/hero',
+        ),
+      ),
+    ),
+  ));
+
+  acf_add_local_field_group(array(
+    'key' => 'group_info_highlight',
+    'title' => __( 'Block: Info Highlight', 'yessin-starter' ),
+    'fields' => array(
+      array(
+        'key' => 'field_info_eyebrow',
+        'label' => __( 'Eyebrow', 'yessin-starter' ),
+        'name' => 'info_eyebrow',
+        'type' => 'text',
+      ),
+      array(
+        'key' => 'field_info_heading',
+        'label' => __( 'Heading', 'yessin-starter' ),
+        'name' => 'info_heading',
+        'type' => 'text',
+        'required' => 1,
+      ),
+      array(
+        'key' => 'field_info_intro',
+        'label' => __( 'Intro Text', 'yessin-starter' ),
+        'name' => 'info_intro',
+        'type' => 'textarea',
+        'rows' => 3,
+      ),
+      array(
+        'key' => 'field_info_items',
+        'label' => __( 'Info Items', 'yessin-starter' ),
+        'name' => 'info_items',
+        'type' => 'repeater',
+        'min' => 1,
+        'layout' => 'row',
+        'button_label' => __( 'Add info item', 'yessin-starter' ),
+        'sub_fields' => array(
+          array(
+            'key' => 'field_info_item_icon',
+            'label' => __( 'Icon', 'yessin-starter' ),
+            'name' => 'icon',
+            'type' => 'image',
+            'return_format' => 'array',
+            'preview_size' => 'thumbnail',
+          ),
+          array(
+            'key' => 'field_info_item_title',
+            'label' => __( 'Title', 'yessin-starter' ),
+            'name' => 'title',
+            'type' => 'text',
+            'required' => 1,
+          ),
+          array(
+            'key' => 'field_info_item_text',
+            'label' => __( 'Text', 'yessin-starter' ),
+            'name' => 'text',
+            'type' => 'textarea',
+            'rows' => 3,
+          ),
+        ),
+      ),
+    ),
+    'location' => array(
+      array(
+        array(
+          'param' => 'block',
+          'operator' => '==',
+          'value' => 'acf/info-highlight',
+        ),
+      ),
+    ),
+  ));
+
+  acf_add_local_field_group(array(
+    'key' => 'group_news_grid',
+    'title' => __( 'Block: News Grid', 'yessin-starter' ),
+    'fields' => array(
+      array(
+        'key' => 'field_news_heading',
+        'label' => __( 'Heading', 'yessin-starter' ),
+        'name' => 'news_heading',
+        'type' => 'text',
+        'required' => 1,
+      ),
+      array(
+        'key' => 'field_news_intro',
+        'label' => __( 'Intro', 'yessin-starter' ),
+        'name' => 'news_intro',
+        'type' => 'textarea',
+        'rows' => 3,
+      ),
+      array(
+        'key' => 'field_news_posts_to_show',
+        'label' => __( 'Posts to show', 'yessin-starter' ),
+        'name' => 'news_posts_to_show',
+        'type' => 'number',
+        'default_value' => 3,
+        'min' => 1,
+        'max' => 6,
+      ),
+      array(
+        'key' => 'field_news_category',
+        'label' => __( 'Limit to category', 'yessin-starter' ),
+        'name' => 'news_category',
+        'type' => 'taxonomy',
+        'taxonomy' => 'category',
+        'field_type' => 'select',
+        'allow_null' => 1,
+        'return_format' => 'object',
+      ),
+      array(
+        'key' => 'field_news_cta',
+        'label' => __( 'Archive CTA', 'yessin-starter' ),
+        'name' => 'news_cta',
+        'type' => 'link',
+        'return_format' => 'array',
+      ),
+    ),
+    'location' => array(
+      array(
+        array(
+          'param' => 'block',
+          'operator' => '==',
+          'value' => 'acf/news-list',
+        ),
+      ),
+    ),
+  ));
+
+  acf_add_local_field_group(array(
+    'key' => 'group_contact_info',
+    'title' => __( 'Block: Contact Info', 'yessin-starter' ),
+    'fields' => array(
+      array(
+        'key' => 'field_contact_heading',
+        'label' => __( 'Heading', 'yessin-starter' ),
+        'name' => 'contact_heading',
+        'type' => 'text',
+      ),
+      array(
+        'key' => 'field_contact_intro',
+        'label' => __( 'Intro', 'yessin-starter' ),
+        'name' => 'contact_intro',
+        'type' => 'textarea',
+        'rows' => 3,
+      ),
+      array(
+        'key' => 'field_contact_items',
+        'label' => __( 'Contact lines', 'yessin-starter' ),
+        'name' => 'contact_items',
+        'type' => 'repeater',
+        'layout' => 'row',
+        'button_label' => __( 'Add contact line', 'yessin-starter' ),
+        'sub_fields' => array(
+          array(
+            'key' => 'field_contact_item_label',
+            'label' => __( 'Label', 'yessin-starter' ),
+            'name' => 'label',
+            'type' => 'text',
+            'wrapper' => array( 'width' => '30' ),
+          ),
+          array(
+            'key' => 'field_contact_item_value',
+            'label' => __( 'Value', 'yessin-starter' ),
+            'name' => 'value',
+            'type' => 'text',
+            'wrapper' => array( 'width' => '35' ),
+          ),
+          array(
+            'key' => 'field_contact_item_link',
+            'label' => __( 'Link (optional)', 'yessin-starter' ),
+            'name' => 'link',
+            'type' => 'link',
+            'return_format' => 'array',
+            'wrapper' => array( 'width' => '35' ),
+          ),
+        ),
+      ),
+      array(
+        'key' => 'field_contact_cta',
+        'label' => __( 'CTA Link', 'yessin-starter' ),
+        'name' => 'contact_cta',
+        'type' => 'link',
+        'return_format' => 'array',
+      ),
+    ),
+    'location' => array(
+      array(
+        array(
+          'param' => 'block',
+          'operator' => '==',
+          'value' => 'acf/contact-info',
+        ),
+      ),
+    ),
+  ));
+
+  acf_add_local_field_group(array(
+    'key' => 'group_cta_banner',
+    'title' => __( 'Block: CTA Banner', 'yessin-starter' ),
+    'fields' => array(
+      array(
+        'key' => 'field_banner_label',
+        'label' => __( 'Label', 'yessin-starter' ),
+        'name' => 'banner_label',
+        'type' => 'text',
+      ),
+      array(
+        'key' => 'field_banner_title',
+        'label' => __( 'Title', 'yessin-starter' ),
+        'name' => 'banner_title',
+        'type' => 'text',
+        'required' => 1,
+      ),
+      array(
+        'key' => 'field_banner_text',
+        'label' => __( 'Text', 'yessin-starter' ),
+        'name' => 'banner_text',
+        'type' => 'textarea',
+        'rows' => 3,
+      ),
+      array(
+        'key' => 'field_banner_primary_cta',
+        'label' => __( 'Primary CTA', 'yessin-starter' ),
+        'name' => 'banner_primary_cta',
+        'type' => 'link',
+        'return_format' => 'array',
+      ),
+      array(
+        'key' => 'field_banner_secondary_cta',
+        'label' => __( 'Secondary CTA', 'yessin-starter' ),
+        'name' => 'banner_secondary_cta',
+        'type' => 'link',
+        'return_format' => 'array',
+      ),
+      array(
+        'key' => 'field_banner_background_color',
+        'label' => __( 'Background Color', 'yessin-starter' ),
+        'name' => 'banner_background_color',
+        'type' => 'color_picker',
+        'default_value' => '#f5b700',
+      ),
+    ),
+    'location' => array(
+      array(
+        array(
+          'param' => 'block',
+          'operator' => '==',
+          'value' => 'acf/cta-banner',
+        ),
+      ),
+    ),
+  ));
+}
+add_action( 'acf/init', 'yessin_register_acf_field_groups' );
 ?>
