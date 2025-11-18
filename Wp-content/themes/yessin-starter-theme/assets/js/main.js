@@ -5,9 +5,58 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('[data-site-nav]');
   const backdrop = document.querySelector('.nav-backdrop');
   const ctaContainer = nav ? nav.querySelector('[data-header-cta]') : null;
+  const searchToggle = document.querySelector('[data-search-toggle]');
+  const searchPanel = document.querySelector('[data-search-panel]');
+  const searchClose = document.querySelector('[data-search-close]');
+  const searchInput = searchPanel ? searchPanel.querySelector('input[type="search"]') : null;
   const submenuState = [];
   const desktopMedia = window.matchMedia('(min-width: 901px)');
+  const isMobileView = () => !desktopMedia.matches;
+  let setNavStateRef = null;
   let resizeTimer;
+
+  const syncSearchPanelForViewport = () => {
+    if (!searchPanel) return;
+
+    if (isMobileView()) {
+      body.classList.remove('search-active');
+      searchPanel.setAttribute('aria-hidden', 'false');
+      if (searchToggle) {
+        searchToggle.setAttribute('aria-expanded', 'false');
+      }
+    } else {
+      const isOpen = body.classList.contains('search-active');
+      searchPanel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
+  };
+
+  const setSearchState = (isOpen) => {
+    if (!searchPanel || !searchToggle) return;
+
+    if (isMobileView()) {
+      syncSearchPanelForViewport();
+      return;
+    }
+
+    if (isOpen && setNavStateRef) {
+      setNavStateRef(false);
+    }
+
+    body.classList.toggle('search-active', isOpen);
+    searchToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+    if (isOpen) {
+      window.requestAnimationFrame(() => {
+        if (searchInput) {
+          searchInput.focus();
+        }
+      });
+    } else {
+      searchToggle.focus();
+    }
+
+    syncSearchPanelForViewport();
+  };
 
   const syncSubmenuStylesForViewport = () => {
     const isDesktop = desktopMedia.matches;
@@ -32,19 +81,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleResize = () => {
     body.classList.add('is-resizing');
     syncSubmenuStylesForViewport();
+    syncSearchPanelForViewport();
 
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       body.classList.remove('is-resizing');
       syncSubmenuStylesForViewport();
+      syncSearchPanelForViewport();
     }, 250);
   };
 
   window.addEventListener('resize', handleResize, { passive: true });
   if (typeof desktopMedia.addEventListener === 'function') {
     desktopMedia.addEventListener('change', syncSubmenuStylesForViewport);
+    desktopMedia.addEventListener('change', syncSearchPanelForViewport);
   } else if (typeof desktopMedia.addListener === 'function') {
     desktopMedia.addListener(syncSubmenuStylesForViewport);
+    desktopMedia.addListener(syncSearchPanelForViewport);
   }
 
   if (toggle && nav) {
@@ -99,6 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const setNavState = (isOpen) => {
+      if (isOpen && body.classList.contains('search-active')) {
+        setSearchState(false);
+      }
+
       body.classList.toggle('nav-open', isOpen);
       toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 
@@ -121,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     };
+    setNavStateRef = setNavState;
 
     toggle.addEventListener('click', () => {
       const nextState = !body.classList.contains('nav-open');
@@ -161,6 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (searchToggle && searchPanel) {
+    searchToggle.addEventListener('click', () => {
+      const nextState = !body.classList.contains('search-active');
+      setSearchState(nextState);
+    });
+  }
+
+  if (searchClose) {
+    searchClose.addEventListener('click', () => setSearchState(false));
+  }
+
   if (header) {
     const onScroll = () => {
       if (window.scrollY > 10) {
@@ -173,4 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && body.classList.contains('search-active')) {
+      event.preventDefault();
+      setSearchState(false);
+    }
+  });
+
+  syncSearchPanelForViewport();
 });
