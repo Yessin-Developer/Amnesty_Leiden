@@ -6,20 +6,59 @@ document.addEventListener('DOMContentLoaded', () => {
   const backdrop = document.querySelector('.nav-backdrop');
   const ctaContainer = nav ? nav.querySelector('[data-header-cta]') : null;
   const submenuState = [];
+  const desktopMedia = window.matchMedia('(min-width: 901px)');
   let resizeTimer;
+
+  const syncSubmenuStylesForViewport = () => {
+    const isDesktop = desktopMedia.matches;
+
+    submenuState.forEach(({ menuItem, submenu }) => {
+      if (isDesktop) {
+        menuItem.classList.remove('is-open');
+        submenu.style.removeProperty('max-height');
+        submenu.style.removeProperty('opacity');
+        submenu.style.removeProperty('pointer-events');
+        submenu.style.removeProperty('transform');
+      } else {
+        const isOpen = menuItem.classList.contains('is-open');
+        submenu.style.maxHeight = isOpen ? `${submenu.scrollHeight}px` : '0px';
+        submenu.style.opacity = isOpen ? '1' : '0';
+        submenu.style.pointerEvents = isOpen ? 'auto' : 'none';
+        submenu.style.transform = isOpen ? 'translateY(0)' : 'translateY(-6px)';
+      }
+    });
+  };
 
   const handleResize = () => {
     body.classList.add('is-resizing');
+    syncSubmenuStylesForViewport();
+
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       body.classList.remove('is-resizing');
+      syncSubmenuStylesForViewport();
     }, 250);
   };
 
   window.addEventListener('resize', handleResize, { passive: true });
+  if (typeof desktopMedia.addEventListener === 'function') {
+    desktopMedia.addEventListener('change', syncSubmenuStylesForViewport);
+  } else if (typeof desktopMedia.addListener === 'function') {
+    desktopMedia.addListener(syncSubmenuStylesForViewport);
+  }
 
   if (toggle && nav) {
     const primaryMenu = nav.querySelector('.primary-menu');
+    const getStateForItem = (item) =>
+      submenuState.find(({ menuItem }) => menuItem === item);
+    const setSubmenuOpen = (state, shouldOpen) => {
+      if (!state) return;
+      const { menuItem, toggleButton } = state;
+
+      menuItem.classList.toggle('is-open', shouldOpen);
+      toggleButton.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+      syncSubmenuStylesForViewport();
+    };
 
     if (primaryMenu) {
       const itemsWithChildren = primaryMenu.querySelectorAll(':scope > .menu-item-has-children');
@@ -47,12 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
         trigger.after(toggleButton);
 
         toggleButton.addEventListener('click', () => {
-          const isOpen = menuItem.classList.toggle('is-open');
-          toggleButton.setAttribute('aria-expanded', String(isOpen));
+          const state = getStateForItem(menuItem);
+          if (!state) return;
+          const nextState = !state.menuItem.classList.contains('is-open');
+          setSubmenuOpen(state, nextState);
         });
 
-        submenuState.push({ menuItem, toggleButton });
+        submenuState.push({ menuItem, toggleButton, submenu });
       });
+
+      syncSubmenuStylesForViewport();
     }
 
     const setNavState = (isOpen) => {
@@ -60,9 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
       toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 
       if (!isOpen) {
-        submenuState.forEach(({ menuItem, toggleButton }) => {
-          menuItem.classList.remove('is-open');
-          toggleButton.setAttribute('aria-expanded', 'false');
+        submenuState.forEach((state) => {
+          setSubmenuOpen(state, false);
         });
       }
 
@@ -95,11 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (directTrigger && parentItem.querySelector('.submenu-toggle')) {
           event.preventDefault();
-          parentItem.classList.toggle('is-open');
-          const button = parentItem.querySelector('.submenu-toggle');
-          if (button) {
-            const isOpen = parentItem.classList.contains('is-open');
-            button.setAttribute('aria-expanded', String(isOpen));
+          const state = getStateForItem(parentItem);
+          if (state) {
+            const nextState = !parentItem.classList.contains('is-open');
+            setSubmenuOpen(state, nextState);
           }
           return;
         }
