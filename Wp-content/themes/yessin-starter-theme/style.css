@@ -377,6 +377,39 @@ body {
   color: #ffdd57;
 }
 
+.social-media-widget__list {
+  list-style: none;
+  display: flex;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+}
+
+.social-media-widget__link {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(255 255 255 / 21%);
+  color: #fff;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.social-media-widget__link svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.social-media-widget__link:hover,
+.social-media-widget__link:focus-visible {
+  background: #ffdd57;
+  color: #111;
+  transform: translateY(-2px);
+}
+
 .footer-meta {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   background: black;
