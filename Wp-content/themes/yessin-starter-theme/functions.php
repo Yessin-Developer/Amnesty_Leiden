@@ -146,8 +146,122 @@ class Yessin_Social_Media_Widget extends WP_Widget {
 
 function yessin_register_widgets() {
   register_widget( 'Yessin_Social_Media_Widget' );
+  register_widget( 'Yessin_Image_Widget' );
+  register_widget( 'Yessin_Paragraph_Widget' );
 }
 add_action( 'widgets_init', 'yessin_register_widgets' );
+
+class Yessin_Image_Widget extends WP_Widget {
+  public function __construct() {
+    parent::__construct(
+      'yessin_image_widget',
+      __( 'Image Block', 'yessin-starter' ),
+      array( 'description' => __( 'Toont een afbeelding met optionele titel.', 'yessin-starter' ) )
+    );
+  }
+
+  public function widget( $args, $instance ) {
+    $title = ! empty( $instance['title'] ) ? $instance['title'] : '';
+    $image_url = ! empty( $instance['image_url'] ) ? $instance['image_url'] : '';
+
+    if ( empty( $image_url ) ) {
+      return;
+    }
+
+    echo $args['before_widget'];
+
+    if ( ! empty( $title ) ) {
+      echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
+    }
+
+    printf(
+      '<figure class="image-widget"><img src="%1$s" alt="%2$s"></figure>',
+      esc_url( $image_url ),
+      esc_attr( $title )
+    );
+
+    echo $args['after_widget'];
+  }
+
+  public function form( $instance ) {
+    $title = isset( $instance['title'] ) ? $instance['title'] : '';
+    $image_url = isset( $instance['image_url'] ) ? $instance['image_url'] : '';
+    ?>
+    <p>
+      <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Titel:', 'yessin-starter' ); ?></label>
+      <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+    </p>
+    <p>
+      <label for="<?php echo esc_attr( $this->get_field_id( 'image_url' ) ); ?>"><?php esc_html_e( 'Afbeelding URL:', 'yessin-starter' ); ?></label>
+      <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'image_url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'image_url' ) ); ?>" type="url" value="<?php echo esc_attr( $image_url ); ?>" placeholder="https://">
+      <small><?php esc_html_e( 'Upload een afbeelding in de mediabibliotheek en plak hier de URL.', 'yessin-starter' ); ?></small>
+    </p>
+    <?php
+  }
+
+  public function update( $new_instance, $old_instance ) {
+    $instance = array();
+    $instance['title'] = sanitize_text_field( $new_instance['title'] ?? '' );
+    $instance['image_url'] = isset( $new_instance['image_url'] ) ? esc_url_raw( $new_instance['image_url'] ) : '';
+
+    return $instance;
+  }
+}
+
+class Yessin_Paragraph_Widget extends WP_Widget {
+  public function __construct() {
+    parent::__construct(
+      'yessin_paragraph_widget',
+      __( 'Paragraaf', 'yessin-starter' ),
+      array( 'description' => __( 'Voegt een tekstblok met titel toe.', 'yessin-starter' ) )
+    );
+  }
+
+  public function widget( $args, $instance ) {
+    $title = ! empty( $instance['title'] ) ? $instance['title'] : '';
+    $content = ! empty( $instance['content'] ) ? $instance['content'] : '';
+
+    if ( empty( $content ) ) {
+      return;
+    }
+
+    echo $args['before_widget'];
+
+    if ( ! empty( $title ) ) {
+      echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
+    }
+
+    printf(
+      '<div class="paragraph-widget__text">%s</div>',
+      wpautop( wp_kses_post( $content ) )
+    );
+
+    echo $args['after_widget'];
+  }
+
+  public function form( $instance ) {
+    $title = isset( $instance['title'] ) ? $instance['title'] : '';
+    $content = isset( $instance['content'] ) ? $instance['content'] : '';
+    ?>
+    <p>
+      <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Titel:', 'yessin-starter' ); ?></label>
+      <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+    </p>
+    <p>
+      <label for="<?php echo esc_attr( $this->get_field_id( 'content' ) ); ?>"><?php esc_html_e( 'Paragraaf tekst:', 'yessin-starter' ); ?></label>
+      <textarea class="widefat" rows="6" id="<?php echo esc_attr( $this->get_field_id( 'content' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'content' ) ); ?>"><?php echo esc_textarea( $content ); ?></textarea>
+    </p>
+    <?php
+  }
+
+  public function update( $new_instance, $old_instance ) {
+    $instance = array();
+    $instance['title'] = sanitize_text_field( $new_instance['title'] ?? '' );
+    $instance['content'] = isset( $new_instance['content'] ) ? wp_kses_post( $new_instance['content'] ) : '';
+
+    return $instance;
+  }
+}
 
 function yessin_enqueue_assets() {
   wp_enqueue_style( 'yessin-style', get_stylesheet_uri(), array(), filemtime( get_template_directory() . '/style.css' ) );
